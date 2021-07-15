@@ -10,7 +10,11 @@ function ProfileSidebar(propriedades) {
   // console.log(propriedades);
   return (
     <Box as="aside">
+
+    <hr />
       <img src={`https://github.com/${propriedades.githubUser}.png`} style={{ borderRadius: '8px' }} />
+
+      <hr />
 
       <a className="boxLink" href={`https//github.com/${propriedades.githubUser}`}>
         @{propriedades.githubUser}
@@ -121,11 +125,12 @@ export default function Home() {
   return (
     // fragments no compile
     <>
-    <AlurakutMenu />
+    <AlurakutMenu githubUser={githubUser} />
     <MainGrid>
       {/* <Box style="grid-area: profileArea;"> */}
       <div className="profileArea" style={{ gridArea: 'profileArea' }}>
         <ProfileSidebar githubUser={githubUser} />
+
       </div>
       <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
         <Box>
