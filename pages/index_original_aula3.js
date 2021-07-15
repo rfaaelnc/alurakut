@@ -7,7 +7,7 @@ import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
 
 // Sempre inicia em maiúsculo componente
 function ProfileSidebar(propriedades) {
-  // console.log(propriedades);
+  console.log(propriedades);
   return (
     <Box as="aside">
       <img src={`https://github.com/${propriedades.githubUser}.png`} style={{ borderRadius: '8px' }} />
@@ -25,7 +25,6 @@ function ProfileSidebar(propriedades) {
 }
 
 function ProfileRelationBox(propriedades) {
-  // console.log(propriedades.items);
   return (
 
     <ProfileRelationsBoxWrapper>
@@ -34,16 +33,16 @@ function ProfileRelationBox(propriedades) {
     </h2>
     
       <ul>
-        {propriedades.items.slice(0,6).map((itemAtual) => {
+        {/* {comunidades.map((itemAtual) => {
           return (
-            <li key={itemAtual.login}>
-              <a href={`https://github.com/${itemAtual.login}`} target="_blank">
-                <img src={itemAtual.avatar_url} />
-                <span>{itemAtual.login}</span>
+            <li key={propriedades.title}>
+              <a href={`/users/${itemAtual.title}`}>
+                <img src={itemAtual.image} />
+                <span>{itemAtual.title}</span>
               </a>
             </li>
           )
-        })}
+        })} */}
         </ul>
     </ProfileRelationsBoxWrapper>
 
@@ -73,9 +72,7 @@ export default function Home() {
     'felipefialho'
   ]
 
-  let qtdCommunity =0;
   const [seguidores, setSeguidores] = React.useState([]);
-  const [community, setCommunity] = React.useState([]);
   //* - Pegar o array de dados do github
     React.useEffect(function() {
       
@@ -87,37 +84,11 @@ export default function Home() {
         setSeguidores(result);
       });
 
-
-      //* TESTE
-      const token = 'a5b9457e4ce7725c9ebdb39beda264';
-
-      fetch(
-        'https://graphql.datocms.com/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: '{ allCommunities { title, imageUrl } }'
-          }),
-        }
-      )
-      .then( res=> res.json())
-      .then((res) => {
-        setCommunity(res.data.allCommunities);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
     }, []); //* Array vazio roda só uma vez
     
   //* 1 - Criar um box que vai ter um map, 
   //* baseado nos itens do array que pegamos do github
-
+  
   return (
     // fragments no compile
     <>
@@ -197,16 +168,11 @@ export default function Home() {
 
         <ProfileRelationsBoxWrapper>
         <h2 className="smallTitle">
-          {/* Minhas comunidades ({comunidades.length}) */}
-          Minhas comunidades ({community.length})
+          Meus amigos ({comunidades.length})
         </h2>
         
           <ul>
-
-          
-            {/* {comunidades.map((itemAtual) => {
-              qtdCommunity++
-              if(qtdCommunity <= 6) {
+            {comunidades.map((itemAtual) => {
               return (
                 <li key={itemAtual.id}>
                   <a href={`/users/${itemAtual.title}`}>
@@ -215,23 +181,7 @@ export default function Home() {
                   </a>
                 </li>
               )
-              }
-            })} */}
-
-            {
-              community.map((itemAtual) => {
-              return (
-                <li key={itemAtual.title}>
-                  <a href={`${itemAtual.imageUrl}`} target="_blank">
-                    <img src={itemAtual.imageUrl} />
-                    <span>{itemAtual.title}</span>
-                  </a>
-                </li>
-              )
-            })
-              
-              
-            }
+            })}
             </ul>
         </ProfileRelationsBoxWrapper>
 
