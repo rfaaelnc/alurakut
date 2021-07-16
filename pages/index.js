@@ -57,11 +57,7 @@ function ProfileRelationBox(propriedades) {
 export default function Home() {
   
   const githubUser = 'rfaaelnc';
-  const [comunidades, setComunidades] = React.useState([{
-    id: '123456789',
-    title: 'Eu odeio acordar cedo',
-    image :'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }]);
+  const [comunidades, setComunidades] = React.useState([]);
   // const comunidades = comunidades[0];
   // const alteradorDeComunidades/setComunidades = comunidades[1];
   // console.log('Teste useState',comunidades[0]);
@@ -82,7 +78,9 @@ export default function Home() {
   const [community, setCommunity] = React.useState([]);
   //* - Pegar o array de dados do github
     React.useEffect(function() {
-      
+    
+      // GET 
+
       fetch('https://api.github.com/users/peas/followers')
       .then(function(response) {
         return response.json();
@@ -105,7 +103,10 @@ export default function Home() {
             'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
-            query: '{ allCommunities { title, imageUrl } }'
+            query: `{ 
+              allCommunities 
+              { id,title, imageUrl } 
+            }`
           }),
         }
       )
@@ -121,7 +122,6 @@ export default function Home() {
     
   //* 1 - Criar um box que vai ter um map, 
   //* baseado nos itens do array que pegamos do github
-
   return (
     // fragments no compile
     <>
@@ -152,19 +152,37 @@ export default function Home() {
 
 
             const comunidade = {
-              id: new Date().toISOString(),
+              // id: new Date().toISOString(),
               title : dadosDoForm.get('title'),
-              image : dadosDoForm.get('image'),
+              image_url : dadosDoForm.get('image'),
+              creator_slug: githubUser,
 
             }
 
+            fetch('/api/comunidades', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', 
+              },
+              body: JSON.stringify(comunidade),
+            })
+            .then(async (response)=> {
+              const dados = await response.json();
+              console.log(dados.registroCriado);
+
+              const comunidade = dados.registroCriado;
+              const comunidadesAtualizadas = [...community, comunidade];
+              setCommunity(comunidadesAtualizadas);
+
+            })
+
             // comunidades.push('Alura Stars');
 
-            const comunidadesAtualizadas = [...comunidades, comunidade];
+            // const comunidadesAtualizadas = [...comunidades, comunidade];
 
-            setComunidades(comunidadesAtualizadas);
+            // setComunidades(comunidadesAtualizadas);
 
-            console.log(e.target.elements);
+            // console.log(e.target.elements);
 
             // console.log(comunidades);
 
@@ -227,7 +245,7 @@ export default function Home() {
               community.map((itemAtual) => {
               return (
                 <li key={itemAtual.title}>
-                  <a href={`${itemAtual.imageUrl}`} target="_blank">
+                  <a href={`/community/${itemAtual.id}`} target="_blank">
                     <img src={itemAtual.imageUrl} />
                     <span>{itemAtual.title}</span>
                   </a>
