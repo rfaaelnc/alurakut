@@ -64,6 +64,7 @@ function ProfileRelationBox(propriedades) {
         
         }
         </ul>
+
         <hr></hr>
 
         <a href="/amigos" className="boxLink">Ver todos</a>
@@ -151,86 +152,39 @@ export default function Home(props) {
 
       </div>
       <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
-        <Box>
-          <h1 className="title">
-            Bem-vindo(a), {githubUser}
-          </h1>
 
-          <OrkutNostalgicIconSet recados={3} fotos={1} fas={3}  />
-        </Box>
+      <Box>
+          <h2 className="subTitle">Amigos({seguidores.length})</h2>
 
-        <Box>
-          <h2 className="subTitle">O que você deseja fazer ?</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
+          <ul className="list">
+          {console.log(seguidores)}
+              {
 
-            const dadosDoForm = new FormData(e.target);
-            console.log('title',dadosDoForm.get('title'));
-            console.log('image',dadosDoForm.get('image'));
+                  
 
+                seguidores.map((item) => {
 
-            const comunidade = {
-              // id: new Date().toISOString(),
-              title : dadosDoForm.get('title'),
-              image_url : dadosDoForm.get('image'),
-              creator_slug: githubUser,
+              return (
+              <li>
+                  <figure>
+                  <a href={`https://github.com/${item.login}`}>
+                      <img src={item.avatar_url} />
+                    </a>
+                  </figure>
+
+                  <h3>{item.login}</h3>
+                  
+              </li>
+
+              )
+            })
 
             }
-
-            fetch('/api/comunidades', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json', 
-              },
-              body: JSON.stringify(comunidade),
-            })
-            .then(async (response)=> {
-              const dados = await response.json();
-              console.log(dados.registroCriado);
-
-              const comunidade = dados.registroCriado;
-              const comunidadesAtualizadas = [...community, comunidade];
-              setCommunity(comunidadesAtualizadas);
-
-            })
-
-            // comunidades.push('Alura Stars');
-
-            // const comunidadesAtualizadas = [...comunidades, comunidade];
-
-            // setComunidades(comunidadesAtualizadas);
-
-            // console.log(e.target.elements);
-
-            // console.log(comunidades);
+          </ul>
 
 
-
-          }}>
-              <div>
-                <input 
-                placeholder="Qual vai ser o nome da comunidade?" 
-                name="title" 
-                aria-label="Qual vai ser o nome da comunidade?"
-                type="text"
-                required
-                />
-              </div>
-
-              <div>
-                <input 
-                placeholder="Qual vai ser a imagem da capa?" 
-                name="image" 
-                aria-label="Qual vai ser a imagem da capa?"
-                type="text" 
-                required
-                />
-              </div>
-              <button>
-                Criar comunidade
-              </button>
-          </form>
         </Box>
+
       </div>
       <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
 
@@ -273,12 +227,14 @@ export default function Home(props) {
               
               
             }
+
             </ul>
             
-          <hr></hr>
+            
+            <hr></hr>
 
-          <a href="/comunidades" className="boxLink">Ver todos</a>
-
+            <a href="/comunidades" className="boxLink">Ver todos</a>
+            
         </ProfileRelationsBoxWrapper>
 
         <ProfileRelationsBoxWrapper>
